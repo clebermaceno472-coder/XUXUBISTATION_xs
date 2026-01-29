@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#030613" />
+  <title>XUXUBISTATION XS — Início</title>
+
+  <style>
+    :root{
+      --bg0:#02040c;
+      --bg1:#060a1f;
+      --c1:#00e5ff;
+      --c2:#ff3bd4;
+      --c3:#ffd700;
+      --glass: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.14);
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent; }
+    html,body{ height:100%; }
+    body{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#fff;
+      overflow:hidden;
+      background: radial-gradient(1200px 700px at 80% 10%, rgba(0,229,255,.14), transparent 55%),
+                  radial-gradient(900px 600px at 20% 90%, rgba(255,59,212,.12), transparent 55%),
+                  radial-gradient(circle at 40% 40%, #080f2b, #02040c 60%);
+    }
+
+    /* STARFIELD */
+    .fx{
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.9;
+      filter: saturate(1.05);
+    }
+    .fx::before, .fx::after{
+      content:"";
+      position:absolute; inset:-40%;
+      background:
+        radial-gradient(circle, rgba(255,255,255,.85) 0 1px, transparent 2px) 0 0/120px 120px,
+        radial-gradient(circle, rgba(255,255,255,.55) 0 1px, transparent 2px) 40px 60px/170px 170px,
+        radial-gradient(circle, rgba(255,255,255,.35) 0 1px, transparent 2px) 80px 20px/240px 240px;
+      opacity:.55;
+      animation: drift 6.5s linear infinite;
+    }
+    .fx::after{
+      opacity:.25;
+      animation-duration: 10.5s;
+      transform: rotate(10deg);
+    }
+    @keyframes drift{
+      from{ transform: translateY(-35px); }
+      to  { transform: translateY(35px); }
+    }
+
+    /* LAYOUT */
+    .wrap{
+      position:relative;
+      height:100%;
+      display:grid;
+      place-items:center;
+      padding:
+        max(22px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        max(22px, env(safe-area-inset-bottom))
+        max(18px, env(safe-area-inset-left));
+    }
+
+    .card{
+      width:min(1040px, 94vw);
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.25));
+      border: 1px solid var(--stroke);
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.55),
+        0 0 0 1px rgba(255,255,255,.06) inset;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute; inset:-40%;
+      background: conic-gradient(from 180deg,
+        rgba(0,229,255,.00),
+        rgba(0,229,255,.10),
+        rgba(255,59,212,.10),
+        rgba(255,215,0,.06),
+        rgba(0,229,255,.00));
+      filter: blur(26px);
+      opacity:.65;
+      animation: aura 7.5s ease-in-out infinite;
+    }
+    @keyframes aura{
+      0%,100%{ transform: rotate(-10deg) translateY(0); }
+      50%{ transform: rotate(12deg) translateY(12px); }
+    }
+
+    .inner{
+      position:relative;
+      padding: 22px;
+      display:grid;
+      gap: 18px;
+    }
+
+    /* BANNER */
+    .banner-frame{
+      position:relative;
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.22);
+      box-shadow: 0 18px 50px rgba(0,0,0,.45);
+    }
+    .banner-frame::after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: linear-gradient(120deg,
+        transparent 0%,
+        rgba(255,255,255,0) 36%,
+        rgba(255,255,255,.22) 50%,
+        rgba(255,255,255,0) 64%,
+        transparent 100%);
+      transform: translateX(-70%) rotate(10deg);
+      animation: shine 2.6s cubic-bezier(.4,0,.2,1) infinite;
+      mix-blend-mode: screen;
+      pointer-events:none;
+      opacity:.9;
+    }
+    @keyframes shine{
+      0%   { transform: translateX(-75%) rotate(10deg); opacity: 0; }
+      15%  { opacity: 1; }
+      55%  { transform: translateX(75%) rotate(10deg); opacity: 1; }
+      75%  { opacity: 0; }
+      100% { transform: translateX(75%) rotate(10deg); opacity: 0; }
+    }
+
+    .banner-img{
+      width:100%;
+      height: min(320px, 34vh);
+      object-fit: cover;
+      display:block;
+      transform: translateZ(0);
+    }
+
+    .fallback{
+      display:none;
+      height: min(320px, 34vh);
+      padding: 26px;
+      background:
+        radial-gradient(700px 300px at 60% 10%, rgba(0,229,255,.20), transparent 55%),
+        radial-gradient(700px 300px at 40% 90%, rgba(255,59,212,.18), transparent 55%),
+        linear-gradient(135deg, rgba(255,255,255,.08), rgba(0,0,0,.25));
+    }
+    .fallback h2{
+      font-size: clamp(1.5rem, 4vw, 2.3rem);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight: 900;
+      margin-bottom: 8px;
+      text-shadow: 0 0 22px rgba(0,229,255,.20);
+    }
+    .fallback p{
+      color: rgba(255,255,255,.82);
+      max-width: 70ch;
+      line-height: 1.5;
+    }
+
+    /* TEXT */
+    .brand{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px 14px;
+      align-items:baseline;
+      justify-content:space-between;
+    }
+    .logo{
+      font-weight: 950;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-size: clamp(1.35rem, 3.3vw, 2.1rem);
+      text-shadow:
+        2px 0 rgba(0,229,255,.45),
+        -2px 0 rgba(255,59,212,.35),
+        0 0 26px rgba(0,229,255,.18);
+    }
+    .tag{
+      color: rgba(255,255,255,.78);
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      font-weight: 800;
+      font-size: .85rem;
+      white-space:nowrap;
+    }
+
+    /* BUTTON */
+    .actions{
+      display:flex;
+      gap: 12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .hint{
+      color: rgba(255,255,255,.68);
+      font-size: .92rem;
+      line-height: 1.35;
+    }
+
+    .btn-start{
+      appearance:none;
+      border:0;
+      cursor:pointer;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-weight: 950;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #041018;
+      background: linear-gradient(90deg, rgba(0,229,255,.95), rgba(0,114,206,.95), rgba(255,59,212,.80));
+      box-shadow:
+        0 18px 45px rgba(0,0,0,.55),
+        0 0 26px rgba(0,229,255,.20);
+      position:relative;
+      isolation:isolate;
+      min-width: min(340px, 92vw);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      user-select:none;
+    }
+    .btn-start::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: linear-gradient(90deg, rgba(0,229,255,.70), rgba(255,59,212,.55));
+      border-radius: 18px;
+      z-index:-1;
+      filter: blur(10px);
+      opacity:.75;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .btn-start:hover::before{ opacity: 1; transform: scale(1.02); }
+    .btn-start:active{ transform: translateY(1px) scale(.995); }
+
+    .btn-ico{
+      width: 12px; height: 12px;
+      border-radius: 3px;
+      background: rgba(255,255,255,.75);
+      box-shadow: 0 0 0 2px rgba(0,0,0,.25) inset;
+      transform: rotate(12deg);
+    }
+
+    .footer{
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      color: rgba(255,255,255,.55);
+      font-size: .8rem;
+      letter-spacing:.06em;
+      border-top: 1px solid rgba(255,255,255,.10);
+      padding-top: 12px;
+    }
+
+    /* LAUNCH OVERLAY */
+    .launch{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.78);
+      backdrop-filter: blur(18px);
+      display:grid;
+      place-items:center;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .25s ease;
+      z-index: 9999;
+    }
+    .launch.on{ opacity:1; pointer-events:auto; }
+    .launch-box{
+      width:min(520px, 92vw);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.30));
+      padding: 18px 18px 16px;
+      box-shadow: 0 26px 70px rgba(0,0,0,.65);
+    }
+    .launch-title{
+      font-weight: 950;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+    }
+    .bar{
+      height: 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+    }
+    .bar > i{
+      display:block;
+      height:100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(0,229,255,.95), rgba(0,114,206,.95), rgba(255,59,212,.82));
+      box-shadow: 0 0 24px rgba(0,229,255,.25);
+      transition: width .18s ease;
+    }
+    .launch-note{
+      margin-top: 10px;
+      color: rgba(255,255,255,.72);
+      font-size: .9rem;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 560px){
+      .inner{ padding: 16px; }
+      .actions{ justify-content:center; }
+      .hint{ text-align:center; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="fx" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <section class="card" role="region" aria-label="Tela inicial do console">
+      <div class="inner">
+
+        <div class="banner-frame">
+          <!-- Salve seu banner como banner.jpg na mesma pasta -->
+          <img class="banner-img" src="banner.jpg" alt="Banner do XUXUBISTATION XS"
+               onerror="this.style.display='none'; document.getElementById('fallback').style.display='block';" />
+          <div class="fallback" id="fallback">
+            <h2>XUXUBISTATION XS</h2>
+            <p>
+              Banner não encontrado. Coloque sua imagem como <b>banner.jpg</b> na mesma pasta deste <b>index.html</b>.
+            </p>
+          </div>
+        </div>
+
+        <div class="brand">
+          <div class="logo">XUXUBISTATION XS</div>
+          <div class="tag">Bixin Explorador</div>
+        </div>
+
+        <div class="actions">
+          <div class="hint">
+            Toque no botão para abrir o console.<br/>
+            <span style="color:rgba(255,255,255,.55)">Dica: também funciona com Enter.</span>
+          </div>
+
+          <button class="btn-start" id="startBtn" type="button">
+            <span class="btn-ico" aria-hidden="true"></span>
+            INICIAR CONSOLE
+          </button>
+        </div>
+
+        <div class="footer">
+          <span>Arquivo alvo: <b>console.html</b></span>
+          <span>Visual: neon + glass + starfield</span>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <div class="launch" id="launch">
+    <div class="launch-box">
+      <div class="launch-title">
+        <span>Carregando…</span>
+        <span id="pct">0%</span>
+      </div>
+      <div class="bar"><i id="fill"></i></div>
+      <div class="launch-note">Iniciando o XUXUBISTATION XS.</div>
+    </div>
+  </div>
+
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const launch = document.getElementById('launch');
+    const fill = document.getElementById('fill');
+    const pct = document.getElementById('pct');
+
+    function goConsole(){
+      // Ajuste aqui se o arquivo tiver outro nome/pasta
+      window.location.href = 'console.html';
+    }
+
+    function startLaunch(){
+      launch.classList.add('on');
+
+      // mini “carregamento” bonito + rápido
+      let p = 0;
+      const t = setInterval(() => {
+        p += (p < 70) ? 9 : (p < 92 ? 4 : 2);
+        if (p >= 100) p = 100;
+        fill.style.width = p + '%';
+        pct.textContent = p + '%';
+
+        if (p >= 100){
+          clearInterval(t);
+          setTimeout(goConsole, 120);
+        }
+      }, 90);
+    }
+
+    startBtn.addEventListener('click', startLaunch);
+
+    // Enter
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') startLaunch();
+    });
+  </script>
+</body>
+</html>
